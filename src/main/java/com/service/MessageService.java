@@ -5,6 +5,8 @@ import com.dao.MessageDao;
 import com.dao.RdmsDao;
 import com.tools.TuLingRobot;
 import com.weixin.WXBizMsgCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -28,6 +30,7 @@ public class MessageService {
     @Autowired
     RdmsDao rdmsDao;
 
+    private final Logger logger = LoggerFactory.getLogger(MessageService.class);
 
     public String getCallBackString(String sMsg, WXBizMsgCrypt wxcpt, String sReqTimeStamp, String sReqNonce) {
         String sEncryptMsg = "";
@@ -87,10 +90,10 @@ public class MessageService {
                 md.pushMessage("liujiang", FromUserName + ":" + Content);
             }
 
-            System.out.println("Content：" + Content);
+           logger.info("Content：" + Content);
 
-            System.out.println("ToUserName：" + ToUserName);
-            System.out.println("FromUserName：" + FromUserName);
+            logger.info("ToUserName：" + ToUserName);
+            logger.info("FromUserName：" + FromUserName);
             String resContent = "此功能正在开发中。。";
             if (Content.contains("剪优")) {
                 resContent = "剪优是世界上最帅的男人！你不用怀疑！";
@@ -136,7 +139,7 @@ public class MessageService {
                 // 图灵机器人的回复
                 resContent = TuLingRobot.getContent(Content, FromUserName);
             }
-            System.out.println(resContent);
+            logger.info(resContent);
             String sRespData = "<xml><ToUserName><![CDATA[" + FromUserName + "]]></ToUserName><FromUserName><![CDATA["
                     + ToUserName + "]]></FromUserName><CreateTime>" + sReqTimeStamp
                     + "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[" + resContent
@@ -146,7 +149,7 @@ public class MessageService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("after encrypt sEncrytMsg: " + sEncryptMsg);
+        logger.info("after encrypt sEncrytMsg: " + sEncryptMsg);
         return sEncryptMsg;
     }
 

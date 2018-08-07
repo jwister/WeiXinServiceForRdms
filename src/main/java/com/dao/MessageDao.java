@@ -1,9 +1,12 @@
 package com.dao;
 
+import com.controller.HomeController;
 import com.mapper.MessageMapper;
 import com.tools.HttpToolRequest;
 
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -21,6 +24,7 @@ public class MessageDao {
     @Autowired
     MessageMapper messageMapper;
 
+    private final Logger logger = LoggerFactory.getLogger(MessageDao.class);
 
     @Value("${wx.Token}")
     String sToken;// 这个Token是随机生成，但是必须跟企业号上的相同
@@ -42,7 +46,7 @@ public class MessageDao {
                 + "\",\"msgtype\" : \"text\",\"agentid\" : 1000002,\"text\" : { \"content\" : \"" + content.toString()
                 + "\"}}";
         String sms = HttpToolRequest.sendPost(sendmessageapi, query);
-        System.out.println(sms);
+        logger.info(sms);
     }
 
     // 获取token
@@ -56,16 +60,16 @@ public class MessageDao {
             String time = hs.get(0).get("curenttime").toString();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             curentTime = sdf.parse(time);
-            System.out.println(sdf.parse(time));
+            logger.info("上次时间："+sdf.parse(time));
             Date now = new Date();
             long interval = (now.getTime() - curentTime.getTime()) / 1000;
-            System.out.println("两个时间相差" + interval + "秒");// 会打印出相差3秒
+            logger.info("两个时间相差" + interval + "秒");// 会打印出相差3秒
             if (interval > 7100) {
 
                 String apiUrl = api + "?corpid=" + sCorpID + "&corpsecret=" + corpsecret;
-                System.out.println("微信接口请求地址：" + apiUrl);
+                logger.info("微信接口请求地址：" + apiUrl);
                 String json = HttpToolRequest.sendPost(apiUrl, "");
-                System.out.println(json);
+                logger.info(json);
                 JSONObject jsonObject = JSONObject.fromObject(json);
                 curentToken = jsonObject.get("access_token").toString();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -73,9 +77,9 @@ public class MessageDao {
                 parmhs.put("curenttoken", curentToken);
                 parmhs.put("curenttime", formatter.format(new Date()));
                 messageMapper.updateToken(parmhs);
-                System.out.println("最新token：" + curentToken);
+                logger.info("最新token：" + curentToken);
             }
-            System.out.println("当前token：" + curentToken);
+            logger.info("当前token：" + curentToken);
 
         } catch (Exception e) {
             e.printStackTrace();

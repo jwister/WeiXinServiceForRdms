@@ -1,11 +1,14 @@
 package com.dao;
 
+import com.controller.HomeController;
 import com.mapper.MessageMapper;
 import com.tools.HttpClientTool;
 import com.tools.HttpToolRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.CookieStore;
 import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +21,7 @@ public class RdmsDao {
     @Autowired
     MessageMapper messageMapper;
 
+    private final Logger logger = LoggerFactory.getLogger(RdmsDao.class);
     //获取登陆cookie
     public CookieStore Login(String userName, String passWord) {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -29,6 +33,7 @@ public class RdmsDao {
         try {
             ss = HttpClientTool.sendPost(url, params);
         } catch (Exception e) {
+            logger.error("rdms login err:"+e.toString());
         }
         return ss;
     }
@@ -50,6 +55,7 @@ public class RdmsDao {
         try {
             ss = HttpClientTool.sendPost(url, params, h);
         } catch (Exception e) {
+            logger.error("send log:"+ e.toString());
         }
         return ss.toString();
     }
@@ -93,12 +99,12 @@ public class RdmsDao {
         Map parm = new HashMap();
         parm.put("username", username);
         Map res = messageMapper.getLogCfg(parm);
-        System.out.println(res.toString() + "----》获取用户信息！");
+        logger.info(res.toString() + "----》获取用户信息！");
         if (res.get("issend").toString().equals("1")) {
             ss = "今日日志已经发送！请勿重复发送！";
         } else {
             WriteLog(cs, sdf.format(d), res.get("projectid").toString(), res.get("workload").toString(), res.get("content").toString(),res.get("spr").toString());
-            System.out.println(username + "----》手动发射日志完成！");
+            logger.info(username + "----》手动发射日志完成！");
             ss = "日志发射完成！";
         }
 

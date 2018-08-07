@@ -29,7 +29,7 @@ public class HomeController {
     @Value("${wx.EncodingAESKey}")
     String sEncodingAESKey;// 这个EncodingAESKey是随机生成，但是必须跟企业号上的相同
 
-    Logger logger = LoggerFactory.getLogger(HomeController.class);
+   private final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
     MessageService ms;
@@ -44,7 +44,7 @@ public class HomeController {
         try {
             WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(sToken, sEncodingAESKey, sCorpID);
             sEchoStr = wxcpt.VerifyURL(sVerifyMsgSig, sVerifyTimeStamp, sVerifyNonce, sVerifyEchoStr);
-            logger.info("verifyurl echostr: " + sEchoStr);
+
         } catch (Exception e) {
             // 验证URL失败，错误原因请查看异常
             e.printStackTrace();
@@ -72,7 +72,7 @@ public class HomeController {
             String sReqData = sbuff.toString();
             WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(sToken, sEncodingAESKey, sCorpID);
             String sMsg = wxcpt.DecryptMsg(sReqMsgSig, sReqTimeStamp, sReqNonce, sReqData);
-            System.out.println("after decrypt msg: " + sMsg);
+            logger.info("after decrypt msg: " + sMsg);
             sEncryptMsg = ms.getCallBackString(sMsg, wxcpt, sReqTimeStamp, sReqNonce);
 
         } catch (Exception e) {
