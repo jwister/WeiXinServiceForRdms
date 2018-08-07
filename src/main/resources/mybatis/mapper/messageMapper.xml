@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.MessageMapper" >
+
+
+
+    <select id="getCrenttoken" resultType="Map"   >
+        SELECT curenttoken,curenttime FROM curenttoken
+    </select>
+
+
+    <!--<insert id="insert" parameterType="com.neo.entity.UserEntity" >-->
+        <!--INSERT INTO-->
+        <!--users-->
+        <!--(userName,passWord,user_sex)-->
+        <!--VALUES-->
+        <!--(#{userName}, #{passWord}, #{userSex})-->
+    <!--</insert>-->
+
+    <update id="updateToken"  parameterType="Map" >
+      UPDATE curenttoken SET curenttoken = #{curenttoken} , curenttime=#{curenttime}
+
+    </update>
+
+    <update id="updateProjectIdByUser"  parameterType="Map" >
+        UPDATE usercfg SET projectid = #{projectid} where username = #{username}
+
+    </update>
+
+    <update id="updateWorkLoadByUser"  parameterType="Map" >
+        UPDATE usercfg SET workload = #{workload} where username = #{username}
+
+    </update>
+
+    <update id="updateContentByUser"  parameterType="Map" >
+        UPDATE usercfg SET content = #{content} where username = #{username}
+
+    </update>
+    <update id="updateEnableByUser"  parameterType="Map" >
+        UPDATE usercfg SET enable = #{enable} where username = #{username}
+
+    </update>
+
+    <select id="getLogCfg"  parameterType="Map" resultType="Map"   >
+        SELECT projectname,projectid,workload,content,enable,issend FROM usercfg where username=#{username}
+    </select>
+
+    <select id="getUserList"  parameterType="Map" resultType="Map"   >
+        SELECT username,projectid,workload,content,enable,issend FROM usercfg
+    </select>
+
+    <update id="updateIsSendByUser"  parameterType="Map" >
+        UPDATE usercfg SET issend = #{issend} where username = #{username}
+
+    </update>
+
+
+
+    <!--<delete id="delete" parameterType="java.lang.Long" >-->
+        <!--DELETE FROM-->
+        <!--users-->
+        <!--WHERE-->
+        <!--id =#{id}-->
+    <!--</delete>-->
+
+</mapper>
