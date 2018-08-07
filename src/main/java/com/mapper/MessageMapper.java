@@ -23,6 +23,8 @@ public interface MessageMapper {
 
     void updateEnableByUser(Map hashMap);
 
+    void updateSprByUser(Map hashMap);
+
     //获取当前用户日志配置
     Map getLogCfg(Map hashMap);
 

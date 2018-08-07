@@ -31,7 +31,7 @@ public class TaskService {
                 CookieStore cs = rdmsDao.Login(userName,userName);
                 Date d = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                rdmsDao.WriteLog(cs, sdf.format(d), maps.get(i).get("projectid").toString(), maps.get(i).get("workload").toString(), maps.get(i).get("content").toString());
+                rdmsDao.WriteLog(cs, sdf.format(d), maps.get(i).get("projectid").toString(), maps.get(i).get("workload").toString(), maps.get(i).get("content").toString(),maps.get(i).get("spr").toString());
                 System.out.println(userName + "———》》》日志已发送");
             }
 //            Map upissend = new HashMap();

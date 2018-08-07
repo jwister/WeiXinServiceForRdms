@@ -45,6 +45,14 @@ public class ConfigDao {
         messageMapper.updateEnableByUser(mp);
     }
 
+    public void updateSprByUser(String username, String content) {
+        content = content.replace("审批人", "");
+        Map mp = new HashMap();
+        mp.put("spr", content);
+        mp.put("username", username);
+        messageMapper.updateSprByUser(mp);
+    }
+
     public String getLogCfg(String username) {
         Map mp = new HashMap();
         mp.put("username", username);
@@ -53,7 +61,8 @@ public class ConfigDao {
         str += "项目编号：" + res.get("projectid").toString() + "\r\n";
         str += "工时：" + res.get("workload").toString() + "\r\n";
         str += "内容：" + res.get("content").toString() + "\r\n";
-        str += "是否启用：" + res.get("enable").toString();
+        str += "是否启用：" + res.get("enable").toString()+ "\r\n";
+        str += "审批人：" + res.get("spr").toString();
         return str;
     }
 

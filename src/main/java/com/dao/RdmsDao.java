@@ -34,12 +34,16 @@ public class RdmsDao {
     }
 
     //日志接口
-    public String WriteLog(CookieStore h, String workjourDate, String projectId, String workload, String content) {
+    public String WriteLog(CookieStore h, String workjourDate, String projectId, String workload, String content,String approverIds) {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("workjourDate", workjourDate));
         params.add(new BasicNameValuePair("projectId", projectId));
         params.add(new BasicNameValuePair("workload", workload));
         params.add(new BasicNameValuePair("content", content));
+        if (!approverIds.equals("0")){
+            params.add(new BasicNameValuePair("approverIds", approverIds));
+        }
+
 
         String url = "http://rdmsmob.dscomm.com.cn:7779/actions/mobileAction!addWorkjour.action?languages=chinese";
         Object ss = null;
@@ -53,12 +57,24 @@ public class RdmsDao {
     //获取项目列表
     public String getProjectList(String username, String keyWord) {
         keyWord = keyWord.replace("搜项目", "");
-
         CookieStore h = Login(username, username);
-        System.out.println(h.toString());
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-
         String url = "http://rdmsmob.dscomm.com.cn:7779/actions/mobileAction!searchProject.action?languages=chinese&ajax=true&word=" + keyWord;
+        String ss = null;
+        try {
+            ss = HttpClientTool.sendPost(url, params, h);
+        } catch (Exception e) {
+
+        }
+        return ss.toString();
+    }
+
+    //获取审批人列表
+    public String getSprList(String username, String keyWord) {
+        keyWord = keyWord.replace("搜审批", "");
+        CookieStore h = Login(username, username);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        String url = "http://rdmsmob.dscomm.com.cn:7779/actions/mobileAction!searchUser.action?languages=chinese&ajax=true&page=1&word=" + keyWord;
         String ss = null;
         try {
             ss = HttpClientTool.sendPost(url, params, h);
@@ -81,7 +97,7 @@ public class RdmsDao {
         if (res.get("issend").toString().equals("1")) {
             ss = "今日日志已经发送！请勿重复发送！";
         } else {
-            WriteLog(cs, sdf.format(d), res.get("projectid").toString(), res.get("workload").toString(), res.get("content").toString());
+            WriteLog(cs, sdf.format(d), res.get("projectid").toString(), res.get("workload").toString(), res.get("content").toString(),res.get("spr").toString());
             System.out.println(username + "----》手动发射日志完成！");
             ss = "日志发射完成！";
         }

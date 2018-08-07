@@ -102,6 +102,9 @@ public class MessageService {
             } else if (Content.contains("工时")) {
                 configDao.updateWorkLoadByUser(FromUserName, Content);
                 resContent = "更新成功！";
+            } else if (Content.contains("审批人")) {
+                configDao.updateSprByUser(FromUserName, Content);
+                resContent = "更新成功！";
             } else if (Content.contains("内容")) {
                 configDao.updateContentByUser(FromUserName, Content);
                 resContent = "更新成功！";
@@ -115,15 +118,19 @@ public class MessageService {
                 resContent = configDao.getLogCfg(FromUserName);
             } else if (Content.contains("搜项目")) {
                 resContent = rdmsDao.getProjectList(FromUserName,Content);
+            }else if (Content.contains("搜审批")) {
+                resContent = rdmsDao.getSprList(FromUserName,Content);
             } else if (Content.contains("日志")) {
                 resContent = "日志指令\r\n";
                 resContent+="'编号xxx':修改默认项目编号。\n";
                 resContent+="'工时xx':修改默认工时。\n";
                 resContent+="'内容xxxx':修改默认内容。\n";
+                resContent+="'审批人xxxx':审批人+id。\n";
                 resContent+="'关闭日志':关闭定时发送。\n";
                 resContent+="'启用日志':启用定时发送。\n";
                 resContent+="'日志配置':查看当前日志配置。\n";
-                resContent+="'搜项目xxx':查看自己相关的项目。\n";
+                resContent+="'搜项目xxx':查看自己相关的项目id。\n";
+                resContent+="'搜审批xxx':查看审批人id。\n";
                 resContent+="'发射':立即发送日志。";
             } else {
                 // 图灵机器人的回复

@@ -40,13 +40,16 @@
         UPDATE usercfg SET enable = #{enable} where username = #{username}
 
     </update>
+    <update id="updateSprByUser"  parameterType="Map" >
+        UPDATE usercfg SET spr = #{spr} where username = #{username}
 
+    </update>
     <select id="getLogCfg"  parameterType="Map" resultType="Map"   >
-        SELECT projectname,projectid,workload,content,enable,issend FROM usercfg where username=#{username}
+        SELECT projectname,projectid,workload,content,enable,issend,spr FROM usercfg where username=#{username}
     </select>
 
     <select id="getUserList"  parameterType="Map" resultType="Map"   >
-        SELECT username,projectid,workload,content,enable,issend FROM usercfg
+        SELECT username,projectid,workload,content,enable,issend,spr FROM usercfg
     </select>
 
     <update id="updateIsSendByUser"  parameterType="Map" >
